@@ -7,7 +7,7 @@ import (
 
 func ToSiswaResponse(s domain.Siswa) web.SiswaResponse {
 	return web.SiswaResponse{
-		Id:           string(s.Id),
+		Id:           s.Id,
 		Nama:         s.Nama,
 		Alamat:       s.Alamat,
 		TanggalLahir: s.Alamat,

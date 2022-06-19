@@ -1,7 +1,7 @@
 package web
 
 type SiswaResponse struct {
-	Id           string `json:"id"`
+	Id           int    `json:"id"`
 	Nama         string `json:"nama"`
 	Alamat       string `json:"alamat"`
 	TanggalLahir string `json:"tanggalLahir"`
