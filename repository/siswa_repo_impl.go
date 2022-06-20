@@ -16,8 +16,8 @@ func NewSiswaRepo() SiswaRepo {
 }
 
 func (s SiswaRepoImpl) SaveSiswa(ctx context.Context, tx *sql.Tx, siswa domain.Siswa) domain.Siswa {
-	SQL := "insert into siswa(nama) values(?)"
-	result, err := tx.ExecContext(ctx, SQL, siswa.Nama)
+	SQL := "insert into siswa(nama, alamat, tanggal_lahir, tempat_lahir, jenis_kelamin, agama, golongan_darah, no_telepon) values(?, ?, ?, ? ,? ,? ,? ,?)"
+	result, err := tx.ExecContext(ctx, SQL, siswa.Nama, siswa.Alamat, siswa.TanggalLahir, siswa.TempatLahir, siswa.JenisKelamin, siswa.Agama, siswa.GolonganDarah, siswa.NoTelpon)
 	helper.PanicIfError(err)
 
 	id, err := result.LastInsertId()
@@ -28,8 +28,8 @@ func (s SiswaRepoImpl) SaveSiswa(ctx context.Context, tx *sql.Tx, siswa domain.S
 }
 
 func (s SiswaRepoImpl) UpdateSiswa(ctx context.Context, tx *sql.Tx, siswa domain.Siswa) domain.Siswa {
-	SQL := "Update siswa set nama = ? where id = ?"
-	_, err := tx.ExecContext(ctx, SQL, siswa.Nama, siswa.Id)
+	SQL := "Update siswa set nama = ?, alamat = ?, tanggal_lahir =?, tempat_lahir=?, jenis_kelamin = ?, agama = ?, golongan_darah = ?, no_telepon = ? where id = ?"
+	_, err := tx.ExecContext(ctx, SQL, siswa.Nama, siswa.Alamat, siswa.TanggalLahir, siswa.TempatLahir, siswa.JenisKelamin, siswa.Agama, siswa.GolonganDarah, siswa.NoTelpon, siswa.Id)
 	helper.PanicIfError(err)
 
 	return siswa

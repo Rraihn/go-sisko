@@ -1,8 +1,8 @@
-package execption
+package exception
 
 import (
 	"github.com/Rraihn/go-sisko/helper"
-	"github.com/Rraihn/go-sisko/model"
+	"github.com/Rraihn/go-sisko/model/web"
 	"github.com/go-playground/validator"
 	"net/http"
 )
@@ -26,7 +26,7 @@ func validationErrors(writer http.ResponseWriter, request *http.Request, err int
 		writer.Header().Set("Content-Type", "application/json")
 		writer.WriteHeader(http.StatusBadRequest)
 
-		webResponse := model.WebResponse{
+		webResponse := web.WebResponse{
 			Code:   http.StatusBadRequest,
 			Status: "BAD REQUEST",
 			Data:   exception.Error(),
@@ -45,7 +45,7 @@ func notFoundError(writer http.ResponseWriter, request *http.Request, err interf
 		writer.Header().Set("Content-Type", "application/json")
 		writer.WriteHeader(http.StatusNotFound)
 
-		webResponse := model.WebResponse{
+		webResponse := web.WebResponse{
 			Code:   http.StatusNotFound,
 			Status: "NOT FOUND",
 			Data:   exception.Error,
@@ -62,7 +62,7 @@ func internalServerError(writer http.ResponseWriter, request *http.Request, err 
 	writer.Header().Set("Content-Type", "application/json")
 	writer.WriteHeader(http.StatusInternalServerError)
 
-	webResponse := model.WebResponse{
+	webResponse := web.WebResponse{
 		Code:   http.StatusInternalServerError,
 		Status: "INTERNAL SERVER ERROR",
 		Data:   err,

@@ -1,4 +1,4 @@
-package model
+package helper_model
 
 import (
 	"github.com/Rraihn/go-sisko/model/domain"

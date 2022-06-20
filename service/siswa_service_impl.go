@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"github.com/Rraihn/go-sisko/helper"
-	"github.com/Rraihn/go-sisko/helper/model"
+	"github.com/Rraihn/go-sisko/helper/helper_model"
 	"github.com/Rraihn/go-sisko/model/domain"
 	"github.com/Rraihn/go-sisko/model/web"
 	"github.com/Rraihn/go-sisko/repository"
@@ -43,26 +43,69 @@ func (s SiswaServiceImpl) CreateSiswa(ctx context.Context, request web.SiswaCrea
 		GolonganDarah: request.GolonganDarah,
 		NoTelpon:      request.NoTelepon,
 	}
-
-	return model.ToSiswaResponse(siswa)
+	siswa = s.SiswaRepository.SaveSiswa(ctx, tx, siswa)
+	return helper_model.ToSiswaResponse(siswa)
 }
 
 func (s SiswaServiceImpl) UpdateSiswa(ctx context.Context, request web.SiswaUpdateRequest) web.SiswaResponse {
-	//TODO implement me
-	panic("implement me")
+	err := s.Validate.Struct(request)
+	helper.PanicIfError(err)
+
+	tx, err := s.DB.Begin()
+	helper.PanicIfError(err)
+	defer helper.CommitOrRollBack(tx)
+
+	siswa, err := s.SiswaRepository.FindSiswaById(ctx, tx, request.Id)
+	if err != nil {
+		helper.PanicIfError(err)
+	}
+
+	siswa.Nama = request.Nama
+	siswa.Alamat = request.Alamat
+	siswa.TanggalLahir = request.TanggalLahir
+	siswa.TempatLahir = request.TempatLahir
+	siswa.JenisKelamin = request.JenisKelamin
+	siswa.Agama = request.Agama
+	siswa.GolonganDarah = request.GolonganDarah
+	siswa.NoTelpon = request.NoTelepon
+
+	siswa = s.SiswaRepository.UpdateSiswa(ctx, tx, siswa)
+
+	return helper_model.ToSiswaResponse(siswa)
 }
 
 func (s SiswaServiceImpl) DeleteSiswa(ctx context.Context, categoryId int) {
-	//TODO implement me
-	panic("implement me")
+	tx, err := s.DB.Begin()
+	helper.PanicIfError(err)
+	defer helper.CommitOrRollBack(tx)
+
+	siswa, err := s.SiswaRepository.FindSiswaById(ctx, tx, categoryId)
+	if err != nil {
+		helper.PanicIfError(err)
+	}
+
+	s.SiswaRepository.DeleteSiswa(ctx, tx, siswa)
 }
 
 func (s SiswaServiceImpl) FindSiswaById(ctx context.Context, categoryId int) web.SiswaResponse {
-	//TODO implement me
-	panic("implement me")
+	tx, err := s.DB.Begin()
+	helper.PanicIfError(err)
+	defer helper.CommitOrRollBack(tx)
+
+	siswa, err := s.SiswaRepository.FindSiswaById(ctx, tx, categoryId)
+	if err != nil {
+		helper.PanicIfError(err)
+	}
+
+	return helper_model.ToSiswaResponse(siswa)
 }
 
 func (s SiswaServiceImpl) FindAllSiswa(ctx context.Context) []web.SiswaResponse {
-	//TODO implement me
-	panic("implement me")
+	tx, err := s.DB.Begin()
+	helper.PanicIfError(err)
+	defer helper.CommitOrRollBack(tx)
+
+	siswaa := s.SiswaRepository.FindAllSiswa(ctx, tx)
+
+	return helper_model.ToSiswaResponses(siswaa)
 }
